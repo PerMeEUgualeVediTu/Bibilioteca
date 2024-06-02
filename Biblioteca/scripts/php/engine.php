@@ -6,20 +6,26 @@ function Find_Book ( $mode ) {
 		$connection = new PDO($dsn, $username, $password, $options);
 		// request books where the name matches
 		$sql = "SELECT opere.ID, opere.titolo, CONCAT(autore.nome, ' ', autore.cognome), opere.anno, biblioteca.luogo_biblioteca, genere.genere 
-				FROM opere, autore, biblioteca, genere 
+				FROM opere, autore, biblioteca, genere
 				WHERE opere.genere = genere.ID 
 				AND opere.autore = autore.ID 
-				AND opere.biblio = biblioteca.ID ";
-		switch ( $mode[0] ) {
-			case 1: $sql .= "AND autore.nome REGEXP :VALUE"; break;
-			case 0: $sql .= "AND opere.titolo REGEXP :VALUE"; break;
-			case 2: $sql .= "AND genere.genere REGEXP :VALUE"; break;
+				AND opere.biblio = biblioteca.ID
+				AND NOT opere.ID IN (
+					SELECT prestito.ID_opera
+					FROM prestito
+				) "; // chacks if the book is booked
+		if ( ! ( $mode[1] == "" || $mode[1] == "*" ) ) {
+			switch ( $mode[0] ) {
+				case 1: $sql .= "AND CONCAT(autore.nome, ' ', autore.cognome) REGEXP :VALUE"; break;
+				case 0: $sql .= "AND opere.titolo REGEXP :VALUE"; break;
+				case 2: $sql .= "AND genere.genere REGEXP :VALUE"; break;
+			}
 		}
-
-
+		
 		// echo $sql . "<br>";
 		$statement = $connection->prepare($sql);
-		$statement->bindParam(':VALUE', $mode[1], PDO::PARAM_STR);
+		if ( ! ( $mode[1] == "" || $mode[1] == "*" ) ) 
+		{ $statement->bindParam(':VALUE', $mode[1], PDO::PARAM_STR); }
 		$statement->execute ( );
 		$Books = $statement->fetchAll();
 

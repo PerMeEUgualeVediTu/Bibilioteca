@@ -39,32 +39,29 @@ async function postData(url = "", data = {}) {
     return response; // parses JSON response into native JavaScript objects
 }
 
-textarea.addEventListener('keydown', checkEnterPress);
-function checkEnterPress(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        // alert(textarea.value + "  " + search_mode);
-        textarea.style.height = 'auto';
-        //prego elia ecco a te l'input di ricerca
-        var formData = new FormData ( );
-        formData.append( "mode", search_mode );
-        formData.append( "query", textarea.value );
+textarea.addEventListener('input', checkEnterPress);
+function checkEnterPress() {
+    // alert(textarea.value + "  " + search_mode);
+    textarea.style.height = 'auto';
+    //prego elia ecco a te l'input di ricerca
+    var formData = new FormData ( );
+    formData.append( "mode", search_mode );
+    formData.append( "query", textarea.value );
 
-        console.log ( formData );
+    console.log ( formData );
 
-        if ( textarea.value == "" || textarea.value == "*" ) { return; } 
+    // if ( textarea.value == "" || textarea.value == "*" ) { return; } 
 
-        postData ( "scripts/php/engine.php", formData ).then (
-            ( data ) => {
-                data.text ( ).then ( 
-                    ( values ) => {
-                        table.innerHTML = values;
-                        console.log ( values )
-                    }
-                )
-            }
-        )
-    }
+    postData ( "scripts/php/engine.php", formData ).then (
+        ( data ) => {
+            data.text ( ).then ( 
+                ( values ) => {
+                    table.innerHTML = values;
+                    console.log ( values )
+                }
+            )
+        }
+    )
 }
 
 selectors.forEach((item, index) => {
