@@ -68,7 +68,8 @@ CREATE TABLE prestito (
 	ID_persona int NOT NULL,
 	ID_opera int NOT NULL,
 	data_prestito int NOT NULL, -- saved as the time.h result
-	fine_prestito int NOT NULL
+	fine_prestito int NOT NULL,
+	onorato bit NOT NULL -- 0 if not onorato 1 if onorato
 );
 
 INSERT INTO genere(genere) VALUES ("la roba che si fuma tolkien");

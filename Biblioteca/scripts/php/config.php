@@ -8,4 +8,5 @@
 
     $session_validity = 3600; // un ora
     $procedure_validity = 3600; // un ora
+    $prestito_validity = 3600; // un ora
 ?>

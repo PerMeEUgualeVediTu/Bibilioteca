@@ -111,3 +111,28 @@ function toggleBorder(index){
         }
     });
 }
+
+function selected_book ( book ) {
+    // let risposta = prompt("Vuoi prenotare il libro " + " di " + "?\nScrivi CONFERMO per confermare");
+    let risposta = "CONFERMO";
+    if ( risposta=="CONFERMO" ) {
+        var formData = new FormData ( );
+        formData.append( "Book", book );
+        formData.append( "User", 2 );
+        console.log ( formData );
+        postData ( "scripts/php/prenota.php", formData ).then (
+            ( data ) => {
+                data.text ( ).then ( 
+                    ( values ) => {
+                        alert ( values );
+                        console.log ( values )
+                    }
+                )
+            }
+        )
+    } else if ( risposta == null ) {
+        alert("Azione annullata");
+    } else {
+        alert("Devi scrivere CONFERMO per confermare la restituzione");
+    }
+}

@@ -5,20 +5,21 @@ function Find_Book ( $mode ) {
 		require "config.php";
 		$connection = new PDO($dsn, $username, $password, $options);
 		// request books where the name matches
-		$sql = "SELECT opere.titolo, CONCAT(autore.nome, ' ', autore.cognome), opere.anno, biblioteca.luogo_biblioteca, genere.genere 
+		$sql = "SELECT opere.ID, opere.titolo, CONCAT(autore.nome, ' ', autore.cognome), opere.anno, biblioteca.luogo_biblioteca, genere.genere 
 				FROM opere, autore, biblioteca, genere 
 				WHERE opere.genere = genere.ID 
 				AND opere.autore = autore.ID 
 				AND opere.biblio = biblioteca.ID ";
 		switch ( $mode[0] ) {
-			case 1: $sql .= "AND autore.nome REGEXP '" . $mode[1] . "'"; break;
-			case 0: $sql .= "AND opere.titolo REGEXP '" . $mode[1] . "'"; break;
-			case 2: $sql .= "AND genere.genere REGEXP '" . $mode[1] . "'"; break;
+			case 1: $sql .= "AND autore.nome REGEXP :VALUE"; break;
+			case 0: $sql .= "AND opere.titolo REGEXP :VALUE"; break;
+			case 2: $sql .= "AND genere.genere REGEXP :VALUE"; break;
 		}
+
 
 		// echo $sql . "<br>";
 		$statement = $connection->prepare($sql);
-		// $statement->bindParam(':END', $END, PDO::PARAM_STR);
+		$statement->bindParam(':VALUE', $mode[1], PDO::PARAM_STR);
 		$statement->execute ( );
 		$Books = $statement->fetchAll();
 
@@ -29,6 +30,7 @@ function Find_Book ( $mode ) {
 		// prints table with books
 		echo "<table id='book-table' class='booktab'>\n";
 		echo "<tr>";
+			echo "<th> ID </th>";
 			echo "<th> titolo </th>";
 			echo "<td> autore </td>";
 			echo "<td> anno </td>";
@@ -37,12 +39,13 @@ function Find_Book ( $mode ) {
 		echo "</tr>";
 
 		foreach ( $Books as $BOOO ) {
-			echo "<tr>\n";
+			echo "<tr id='book_$BOOO[0]' onclick='selected_book($BOOO[0])'>\n";
 				echo "<th>".$BOOO[0]."</th>";
 				echo "<td>".$BOOO[1]."</td>";
 				echo "<td>".$BOOO[2]."</td>";
 				echo "<td>".$BOOO[3]."</td>";
-				echo "<td>".$BOOO[4]."</td>\n";
+				echo "<td>".$BOOO[4]."</td>";
+				echo "<td>".$BOOO[5]."</td>\n";
 			echo "</tr>\n";
 		}
 		echo "</table>";
