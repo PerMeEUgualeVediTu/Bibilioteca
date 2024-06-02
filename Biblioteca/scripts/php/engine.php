@@ -1,24 +1,22 @@
 <!--this script creats a table and prints where it is called-->
-
 <?php
-function Find_Book ( $book ) {
+function Find_Book ( $mode ) {
 	try {
 		require "config.php";
 		$connection = new PDO($dsn, $username, $password, $options);
 		// request books where the name matches
-		$mode = [1,"Esattamente"]; // 0 mode = sort by author, 1 = sort by title, 2 = sort by genere
 		$sql = "SELECT opere.titolo, CONCAT(autore.nome, ' ', autore.cognome), opere.anno, biblioteca.luogo_biblioteca, genere.genere 
 				FROM opere, autore, biblioteca, genere 
 				WHERE opere.genere = genere.ID 
 				AND opere.autore = autore.ID 
 				AND opere.biblio = biblioteca.ID ";
 		switch ( $mode[0] ) {
-			case 0: $sql .= "AND autore.nome = '" . $mode[1] . "'"; break;
-			case 1: $sql .= "AND opere.titolo = '" . $mode[1] . "'"; break;
-			case 2: $sql .= "AND genere.genere = \"" . $mode[1] . "\""; break;
+			case 1: $sql .= "AND autore.nome REGEXP '" . $mode[1] . "'"; break;
+			case 0: $sql .= "AND opere.titolo REGEXP '" . $mode[1] . "'"; break;
+			case 2: $sql .= "AND genere.genere REGEXP '" . $mode[1] . "'"; break;
 		}
 
-		echo $sql . "<br>";
+		// echo $sql . "<br>";
 		$statement = $connection->prepare($sql);
 		// $statement->bindParam(':END', $END, PDO::PARAM_STR);
 		$statement->execute ( );
@@ -29,7 +27,7 @@ function Find_Book ( $book ) {
 		// if there are no books it stops
 		if ( sizeof ( $Books ) == 0 ) { echo "no books"; return; }
 		// prints table with books
-		echo "<table>\n";
+		echo "<table id='book-table' class='booktab'>\n";
 		echo "<tr>";
 			echo "<th> titolo </th>";
 			echo "<td> autore </td>";
@@ -39,16 +37,24 @@ function Find_Book ( $book ) {
 		echo "</tr>";
 
 		foreach ( $Books as $BOOO ) {
-			echo "<tr>";
+			echo "<tr>\n";
 				echo "<th>".$BOOO[0]."</th>";
 				echo "<td>".$BOOO[1]."</td>";
 				echo "<td>".$BOOO[2]."</td>";
 				echo "<td>".$BOOO[3]."</td>";
-				echo "<td>".$BOOO[4]."</td>";
-			echo "</tr>";
+				echo "<td>".$BOOO[4]."</td>\n";
+			echo "</tr>\n";
 		}
 		echo "</table>";
 	} catch(PDOException $error) 
 	{ echo $error->getMessage(); }
 }
+
+if ( isset ( $_POST ) ) {
+	Find_Book ( [ $_POST ["mode"], $_POST ["query"] ] );
+} else {
+	echo "get the cok"; 
+}
 ?>
+
+<!-- BALS -->

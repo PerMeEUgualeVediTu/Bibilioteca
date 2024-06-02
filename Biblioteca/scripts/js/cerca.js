@@ -4,8 +4,9 @@ const menu_item = document.querySelectorAll('.header .nav-bar .nav-list ul li a'
 const header = document.querySelector('.header.container');
 const textarea = document.querySelector('.input-box-search');
 const selectors = document.querySelectorAll('.service-item');
-const search_prompt = document.querySelector('.search-prompt')
-let search_mode = "titolo";
+const search_prompt = document.querySelector('.search-prompt');
+const table = document.getElementById ( "book-table" );
+let search_mode = 0;
 
 selectors.item(0).classList.toggle("selected");
 
@@ -28,14 +29,41 @@ function autoResize(textarea) {
     textarea.style.height = textarea.scrollHeight + 10 + 'px';
 }
 
+async function postData(url = "", data = {}) {
+    // Default options are marked with *
+    const response = await fetch(url, {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        
+        body: data, // body data type must match "Content-Type" header
+    });
+    return response; // parses JSON response into native JavaScript objects
+}
+
 textarea.addEventListener('keydown', checkEnterPress);
 function checkEnterPress(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
-        alert(textarea.value + "  " + search_mode);
-        textarea.value = "";
+        // alert(textarea.value + "  " + search_mode);
         textarea.style.height = 'auto';
         //prego elia ecco a te l'input di ricerca
+        var formData = new FormData ( );
+        formData.append( "mode", search_mode );
+        formData.append( "query", textarea.value );
+
+        console.log ( formData );
+
+        if ( textarea.value == "" || textarea.value == "*" ) { return; } 
+
+        postData ( "scripts/php/engine.php", formData ).then (
+            ( data ) => {
+                data.text ( ).then ( 
+                    ( values ) => {
+                        table.innerHTML = values;
+                        console.log ( values )
+                    }
+                )
+            }
+        )
     }
 }
 
@@ -47,26 +75,30 @@ selectors.forEach((item, index) => {
 });
 
 function switchSearchMode(index) {
+    search_mode = index;
+
+    var internal_search_mode;
+
     switch (index) {
         case 0:
-            search_mode = "titolo";
+            internal_search_mode = "titolo";
             break;
         case 1:
-            search_mode = "autore";
+            internal_search_mode = "autore";
             break;
         case 2:
-            search_mode = "genere";
+            internal_search_mode = "genere";
             break;
         default:
             break;
     }
     
-    if(search_mode == "autore"){
-        textarea.placeholder = "Inserisci l'"+ search_mode + " del libro";
-        search_prompt.innerHTML = "Inserisci qui l'" + search_mode +" del libro, e premi invia per cercarlo nella nostra libreria!";
+    if(internal_search_mode == "autore"){
+        textarea.placeholder = "Inserisci l'"+ internal_search_mode + " del libro";
+        search_prompt.innerHTML = "Inserisci qui l'" + internal_search_mode +" del libro, e premi invia per cercarlo nella nostra libreria!";
     }else{
-        textarea.placeholder = "Inserisci il "+ search_mode + " del libro";
-        search_prompt.innerHTML = "Inserisci qui il " + search_mode +" del libro, e premi invia per cercarlo nella nostra libreria!";
+        textarea.placeholder = "Inserisci il "+ internal_search_mode + " del libro";
+        search_prompt.innerHTML = "Inserisci qui il " + internal_search_mode +" del libro, e premi invia per cercarlo nella nostra libreria!";
     }
 }
 
