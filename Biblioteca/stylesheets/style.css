@@ -270,7 +270,7 @@ p {
 /* Hero Section */
 
 #hero {
-    background-image: url(./img/hero-bg.png);
+    background-image: url(../img/hero-bg.png);
     background-size: cover;
     background-position: top center;
     position: relative;
@@ -947,5 +947,14 @@ p {
     }
 }
 
+.disponibile {
+    opacity: 0.5;
+    color: white;
+    background-color: grey;
+}
+
+#book-table tr:nth-child(2n).disponibile {
+  background-color: #000;
+}
 
 /* End  Media Query For Desktop */

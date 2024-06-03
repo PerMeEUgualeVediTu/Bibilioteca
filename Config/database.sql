@@ -72,6 +72,22 @@ CREATE TABLE prestito (
 	onorato bit NOT NULL -- 0 if not onorato 1 if onorato
 );
 
+-- Tabelle per il login
+
+CREATE TABLE Procedures (
+	Procedure_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	Procedure_end INT NOT NULL,
+	Procedure_desc VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Sessions (
+	Session_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	Session_token CHAR (64) NOT NULL,
+	Session_ip CHAR(45) NOT NULL,
+	Logged_user_id INT NOT NULL,
+	Session_start INT NOT NULL
+);
+
 INSERT INTO genere(genere) VALUES ("la roba che si fuma tolkien");
 INSERT INTO genere(genere) VALUES ("balin shit");
 INSERT INTO genere(genere) VALUES ("il profumo magico");
@@ -86,6 +102,7 @@ INSERT INTO autore(CF,nome,cognome,biografia) VALUES ("TTTTTTTT","JRR","Tolkien"
 INSERT INTO autore(CF,nome,cognome,biografia) VALUES ("TTTTTTTT","Lebron James","My sunshine","buon uomo ciao");
 INSERT INTO autore(CF,nome,cognome,biografia) VALUES ("TTTTTTTT","No","Cap","buon uomo ciao");
 INSERT INTO autore(CF,nome,cognome,biografia) VALUES ("TTTTTTTT","On","Cod","buon uomo ciao");
+INSERT INTO autore(CF,nome,cognome,biografia) VALUES ("DDDDDDDD","Dante","Aliqueri","buon uomo ciao");
 
 INSERT INTO biblioteca(luogo_biblioteca) VALUES ("Io dove");
 INSERT INTO biblioteca(luogo_biblioteca) VALUES ("Io quando");
@@ -107,6 +124,9 @@ INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (3,2,"LA diversita 3"
 INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (4,2,"Bed time story 4",1969,1);
 INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (4,1,"Esattamente 4",1942,1);
 INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (4,2,"LA diversita 4",1969,1);
+
+INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (5,2,"il sama kutra",1969,1);
+INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (5,2,"il kama sutra",1969,1);
 
 INSERT INTO prestito(ID_persona,ID_opera,data_prestito,fine_prestito) VALUES (0,0,0,120);
 

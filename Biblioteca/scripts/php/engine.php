@@ -5,15 +5,15 @@ function Find_Book ( $mode ) {
 		require "config.php";
 		$connection = new PDO($dsn, $username, $password, $options);
 		// request books where the name matches
-		$sql = "SELECT opere.ID, opere.titolo, CONCAT(autore.nome, ' ', autore.cognome), opere.anno, biblioteca.luogo_biblioteca, genere.genere 
+		$sql = "SELECT opere.ID, opere.titolo, CONCAT(autore.nome, ' ', autore.cognome), opere.anno, biblioteca.luogo_biblioteca, genere.genere, NOT opere.ID IN (
+					SELECT prestito.ID_opera
+					FROM prestito
+					WHERE prestito.onorato = 0
+				) as disponibilita
 				FROM opere, autore, biblioteca, genere
 				WHERE opere.genere = genere.ID 
 				AND opere.autore = autore.ID 
-				AND opere.biblio = biblioteca.ID
-				AND NOT opere.ID IN (
-					SELECT prestito.ID_opera
-					FROM prestito
-				) "; // chacks if the book is booked
+				AND opere.biblio = biblioteca.ID "; // chacks if the book is booked
 		if ( ! ( $mode[1] == "" || $mode[1] == "*" ) ) {
 			switch ( $mode[0] ) {
 				case 1: $sql .= "AND CONCAT(autore.nome, ' ', autore.cognome) REGEXP :VALUE"; break;
@@ -21,7 +21,8 @@ function Find_Book ( $mode ) {
 				case 2: $sql .= "AND genere.genere REGEXP :VALUE"; break;
 			}
 		}
-		
+		$sql .= " ORDER BY disponibilita DESC";
+
 		// echo $sql . "<br>";
 		$statement = $connection->prepare($sql);
 		if ( ! ( $mode[1] == "" || $mode[1] == "*" ) ) 
@@ -42,16 +43,18 @@ function Find_Book ( $mode ) {
 			echo "<td> anno </td>";
 			echo "<td> bib </td>";
 			echo "<td> genere </td>";
+			echo "<td> disponibilità </td>";
 		echo "</tr>";
 
 		foreach ( $Books as $BOOO ) {
-			echo "<tr id='book_$BOOO[0]' onclick='selected_book($BOOO[0])'>\n";
+			echo "<tr id='book_$BOOO[0]' onclick='selected_book($BOOO[0])' " .( ($BOOO[6] == 0) ? ("class='disponibile'") : ("class=''") ). ">\n";
 				echo "<th>".$BOOO[0]."</th>";
 				echo "<td>".$BOOO[1]."</td>";
 				echo "<td>".$BOOO[2]."</td>";
 				echo "<td>".$BOOO[3]."</td>";
 				echo "<td>".$BOOO[4]."</td>";
-				echo "<td>".$BOOO[5]."</td>\n";
+				echo "<td>".$BOOO[5]."</td>";
+				echo "<td>".( ($BOOO[6] == 1) ? ('disponibile') : ('non disponibile') )."</td>\n";
 			echo "</tr>\n";
 		}
 		echo "</table>";

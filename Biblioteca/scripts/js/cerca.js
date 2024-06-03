@@ -43,6 +43,7 @@ textarea.addEventListener('input', checkEnterPress);
 function checkEnterPress() {
     // alert(textarea.value + "  " + search_mode);
     textarea.style.height = 'auto';
+    if ( [...textarea.value].length <= 3 ) { return; }
     //prego elia ecco a te l'input di ricerca
     var formData = new FormData ( );
     formData.append( "mode", search_mode );
