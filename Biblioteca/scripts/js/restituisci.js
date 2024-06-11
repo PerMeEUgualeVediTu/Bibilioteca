@@ -43,7 +43,6 @@ async function postData(url = "", data = {}) {
 }
 
 function configureTable ( ) {
-
     var formData = new FormData ( );
     formData.append( "User", 2 );
     formData.append( "Mode", 0 );
@@ -61,8 +60,7 @@ function configureTable ( ) {
 }
 
 function selected_book ( libro ) {
-    // let risposta = prompt("Vuoi prenotare il libro " + " di " + "?\nScrivi CONFERMO per confermare");
-    let risposta = "CONFERMO";
+    let risposta = prompt("Vuoi prenotare il libro " + " di " + "?\nScrivi CONFERMO per confermare");
     if ( risposta=="CONFERMO" ) {
         var formData = new FormData ( );
         formData.append( "Book", libro );

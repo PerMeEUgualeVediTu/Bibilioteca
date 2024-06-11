@@ -15,6 +15,26 @@ FLUSH PRIVILEGES;
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
+-- -- Login
+
+-- Tabella 'Sessioni'
+
+CREATE TABLE Sessions (
+	Session_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	Session_token VARCHAR (64) NOT NULL,
+	Session_ip VARCHAR(45) NOT NULL,
+	Logged_user_id INT NOT NULL,
+	Session_start INT NOT NULL
+);
+
+-- Tabella 'Procedure'
+
+CREATE TABLE Procedures (
+	Procedure_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	Procedure_end INT NOT NULL,
+	Procedure_desc VARCHAR(100) NOT NULL
+);
+
 -- -- Primitives
 
 -- Tabella 'Genere'
@@ -28,10 +48,13 @@ CREATE TABLE genere (
 
 CREATE TABLE persona (
 	ID int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	CF varchar(14) NOT NULL,
 	nome varchar(35) NOT NULL,
 	cognome varchar(35) NOT NULL,
-	Identificativo int NOT NULL
+	E_mail VARCHAR(40) NOT NULL,
+	Password_hash CHAR(64) NOT NULL,
+    Password_salt CHAR(64) NOT NULL,
+	Register_date INT NOT NULL,
+	User_icon CHAR(32) NOT NULL
 );
 
 -- Tabella 'Autore'
@@ -91,47 +114,3 @@ CREATE TABLE Sessions (
 	Logged_user_id INT NOT NULL,
 	Session_start INT NOT NULL
 );
-
-INSERT INTO genere(genere) VALUES ("la roba che si fuma tolkien");
-INSERT INTO genere(genere) VALUES ("balin shit");
-INSERT INTO genere(genere) VALUES ("il profumo magico");
-INSERT INTO genere(genere) VALUES ("genere serio");
-
-INSERT INTO persona(CF,nome,cognome,Identificativo) VALUES ("GGGGGGGG","Giorgio1","Vanni1",23456789);
-INSERT INTO persona(CF,nome,cognome,Identificativo) VALUES ("GGGGGGGG","Giorgio2","Vanni2",23456790);
-INSERT INTO persona(CF,nome,cognome,Identificativo) VALUES ("GGGGGGGG","Giorgio3","Vanni3",23456791);
-INSERT INTO persona(CF,nome,cognome,Identificativo) VALUES ("GGGGGGGG","Giorgio4","Vanni4",23456792);
-
-INSERT INTO autore(CF,nome,cognome,biografia) VALUES ("TTTTTTTT","JRR","Tolkien","buon uomo ciao");
-INSERT INTO autore(CF,nome,cognome,biografia) VALUES ("TTTTTTTT","Lebron James","My sunshine","buon uomo ciao");
-INSERT INTO autore(CF,nome,cognome,biografia) VALUES ("TTTTTTTT","No","Cap","buon uomo ciao");
-INSERT INTO autore(CF,nome,cognome,biografia) VALUES ("TTTTTTTT","On","Cod","buon uomo ciao");
-INSERT INTO autore(CF,nome,cognome,biografia) VALUES ("DDDDDDDD","Dante","Aliqueri","buon uomo ciao");
-
-INSERT INTO biblioteca(luogo_biblioteca) VALUES ("Io dove");
-INSERT INTO biblioteca(luogo_biblioteca) VALUES ("Io quando");
-INSERT INTO biblioteca(luogo_biblioteca) VALUES ("Io perche");
-INSERT INTO biblioteca(luogo_biblioteca) VALUES ("Io anche no");
-
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (1,2,"il signore con l'anello",1969,1);
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (1,1,"Uomi piccoli e Gangialf",1942,1);
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (1,2,"Le similitudini",1936,1);
-
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (2,2,"Bed time story",1969,1);
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (2,1,"Esattamente",1942,1);
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (2,2,"LA diversita",1969,1);
-
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (3,2,"Bed time story 3",1969,1);
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (3,1,"Esattamente 3 ",1942,1);
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (3,2,"LA diversita 3",1969,1);
-
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (4,2,"Bed time story 4",1969,1);
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (4,1,"Esattamente 4",1942,1);
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (4,2,"LA diversita 4",1969,1);
-
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (5,2,"il sama kutra",1969,1);
-INSERT INTO opere(autore,biblio,titolo,anno,genere) VALUES (5,2,"il kama sutra",1969,1);
-
-INSERT INTO prestito(ID_persona,ID_opera,data_prestito,fine_prestito) VALUES (0,0,0,120);
-
-show tables;
