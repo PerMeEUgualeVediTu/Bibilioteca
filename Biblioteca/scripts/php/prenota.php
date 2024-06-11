@@ -6,7 +6,8 @@ function Prenota ( $book, $persona ) { // book id and person id
 		// check
 		$sql = "SELECT prestito.onorato as O FROM opere, prestito
 				WHERE opere.ID = :BOOKID
-				AND opere.ID = prestito.ID_Opera";
+				AND opere.ID = prestito.ID_Opera
+                AND prestito.onorato = 0";
 
 		$statement = $connection->prepare($sql);
 		$statement->bindParam(':BOOKID', $book, PDO::PARAM_STR);

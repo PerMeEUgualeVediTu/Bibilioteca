@@ -5,7 +5,11 @@ USE BIB100;
 
 -- creating user
 
+-- form mysql
 CREATE USER 'bibmin'@'localhost' IDENTIFIED WITH mysql_native_password BY 'bibcz42DF100*';
+-- for maria
+CREATE USER 'bibmin'@'localhost' IDENTIFIED BY 'bibcz42DF100*';
+
 GRANT ALL PRIVILEGES ON BIB100.* TO 'bibmin'@'localhost';
 FLUSH PRIVILEGES;
 

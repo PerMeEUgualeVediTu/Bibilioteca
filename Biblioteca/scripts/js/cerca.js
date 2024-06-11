@@ -128,6 +128,7 @@ function selected_book ( book ) {
                 )
             }
         )
+        document.getElementById( "book_" + book ).classList.add ( "disponibile" );
     } else if ( risposta == null ) {
         alert("Azione annullata");
     } else {
